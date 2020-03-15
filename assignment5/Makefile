@@ -1,0 +1,10 @@
+CC=g++ -std=c++11 -g -Wall
+exe_file=awesome_program
+
+$(exe_file): Node.hpp Linked_List.hpp prog.o
+	$(CC) Node.hpp Linked_List.hpp prog.o -o $(exe_file)
+prog.o: Linked_List.hpp prog.cpp
+	$(CC) -c prog.cpp
+.PHONY: clean
+clean:
+	rm -f *.o $(exe_file)
