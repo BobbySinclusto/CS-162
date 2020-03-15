@@ -228,22 +228,27 @@ template <typename T>
 Node<T>* Linked_List<T>::merge(Node<T> *first, unsigned int first_size, Node<T> *second, unsigned int second_size) {
     Node<T> *new_head = first->val < second->val ? first : second; // Keep track of where the head of the list should be so we can return it later
     Node<T> *prev = nullptr;
-    int i = 0, j = 0;
+    unsigned int i = 0, j = 0;
 
     while (i < first_size && j < second_size) {
         if (first->val < second->val) {
             prev = first;
-            first = first->next;
+            if (first->next != nullptr) {
+                first = first->next;
+            }
+            else {
+                first->next = second;
+            }
             ++i;
         }
         else {
+            if (prev != nullptr) prev->next = second;
             prev = second;
             second = second->next;
             prev->next = first;
             ++j;
         }
     }
-    if (first != nullptr) first->next = second;
     return new_head;
 }
 
