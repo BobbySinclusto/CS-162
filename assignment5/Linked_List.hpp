@@ -47,6 +47,15 @@ private:
     ********************************************************/
     Node<T>* selection_sort(Node<T> *);
 
+    /********************************************************
+    ** Function: is_prime
+    ** Description: returns whether or not a number is prime
+    ** Input: number to check
+    ** Pre-Conditions: none
+    ** Post-Conditions: returns whether or not the number is prime
+    ********************************************************/
+    bool is_prime(T);
+
 public:
     /********************************************************
     ** Function: Linked_List constructor
@@ -164,16 +173,6 @@ public:
     ** Post-Conditions: returns number of primes in the list
     ********************************************************/
     unsigned int count_primes();
-
-    /********************************************************
-    ** Function: is_prime
-    ** Description: returns whether or not a number is prime
-    ** Input: number to check
-    ** Pre-Conditions: none
-    ** Post-Conditions: returns whether or not the number is prime
-    ********************************************************/
-    bool is_prime(T);
-
 };
 
 template <typename T>
