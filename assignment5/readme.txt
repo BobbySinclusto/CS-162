@@ -13,3 +13,9 @@ Extra Credit:
 
     The sort_descending() function is implemented using a recursive selection sort algorithm in the
     function selection_sort().
+
+Compile:
+    make
+
+Run:
+    ./awesome_program

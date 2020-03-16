@@ -38,6 +38,15 @@ private:
     ********************************************************/
     Node<T>* merge(Node<T> *, unsigned int, Node<T> *, unsigned int);
 
+    /********************************************************
+    ** Function: selection_sort
+    ** Description: sorts the list in ascending order using recursive selection sort
+    ** Input: pointer to start of list, size
+    ** Pre-Conditions: list has at least one element
+    ** Post-Conditions: list is sorted, new head is returned
+    ********************************************************/
+    Node<T>* selection_sort(Node<T> *);
+
 public:
     /********************************************************
     ** Function: Linked_List constructor
@@ -47,6 +56,24 @@ public:
     ** Post-Conditions: member variables are initialized
     ********************************************************/
     Linked_List();
+
+    /********************************************************
+    ** Function: Linked_List copy constructor
+    ** Description: initializes a new list that is a copy of an old list
+    ** Input: linked list to copy
+    ** Pre-Conditions: none
+    ** Post-Conditions: performs a deep copy of given list
+    ********************************************************/
+    Linked_List(const Linked_List&);
+
+    /********************************************************
+    ** Function: Linked_List assignment operator overload
+    ** Description: clears the list, then copies nodes from given list
+    ** Input: linked list to copy
+    ** Pre-Conditions: none
+    ** Post-Conditions: performs a deep copy of given list
+    ********************************************************/
+    Linked_List& operator=(const Linked_List&);
 
     /********************************************************
     ** Function: Linked_List destructor
@@ -128,12 +155,70 @@ public:
     ** Post-Conditions: list is sorted
     ********************************************************/
     void sort_descending();
+
+    /********************************************************
+    ** Function: count_primes
+    ** Description: returns number of primes in the list
+    ** Input: none
+    ** Pre-Conditions: none
+    ** Post-Conditions: returns number of primes in the list
+    ********************************************************/
+    unsigned int count_primes();
+
+    /********************************************************
+    ** Function: is_prime
+    ** Description: returns whether or not a number is prime
+    ** Input: number to check
+    ** Pre-Conditions: none
+    ** Post-Conditions: returns whether or not the number is prime
+    ********************************************************/
+    bool is_prime(T);
+
 };
 
 template <typename T>
 Linked_List<T>::Linked_List() {
     length = 0;
     head = nullptr;
+}
+
+template <typename T>
+Linked_List<T>::Linked_List(const Linked_List<T>& l) {
+    length = l.length;
+    if (l.head == nullptr) {
+        head = nullptr;
+        return;
+    }
+    head = new Node<T>(l.head->val);
+    Node<T> *current_old = l.head;
+    Node<T> *current_new = head;
+    while (current_old->next != nullptr) {
+        current_new->next = new Node<T>(current_old->next->val);
+        current_old = current_old->next;
+        current_new = current_new->next;
+    }
+    current_new->next = nullptr;
+}
+
+template <typename T>
+Linked_List<T>& Linked_List<T>::operator=(const Linked_List<T> &old) {
+    if (this == &old) return *this;
+    clear();
+    length = old.length;
+    if (old.head == nullptr) {
+        head = nullptr;
+        return *this;
+    }
+    head = new Node<T>(old.head->val);
+    Node<T> *current_old = old.head;
+    Node<T> *current_new = head;
+    while (current_old->next != nullptr) {
+        current_new->next = new Node<T>(current_old->next->val);
+        current_old = current_old->next;
+        current_new = current_new->next;
+    }
+    current_new->next = nullptr;
+    return *this;
 }
 
 template <typename T>
@@ -212,6 +297,11 @@ void Linked_List<T>::sort_ascending() {
 }
 
 template <typename T>
+void Linked_List<T>::sort_descending() {
+    head = selection_sort(head);
+}
+
+template <typename T>
 Node<T>* Linked_List<T>::mergesort(Node<T> *start, unsigned int size) {
     if (size <= 1) {
         start->next = nullptr;
@@ -252,50 +342,51 @@ Node<T>* Linked_List<T>::merge(Node<T> *first, unsigned int first_size, Node<T> 
     return new_head;
 }
 
-/*
-//Old dumb merge function
 template <typename T>
-Node<T>* Linked_List<T>::merge(Node<T> *first, unsigned int first_size, Node<T> *second, unsigned int second_size) {
-    Node<T> *new_head = first->val < second->val ? first : second; // Keep track of where the head of the list should be so we can return it later
+Node<T>* Linked_List<T>::selection_sort(Node<T>* first) {
+    if (first->next == nullptr) {
+        return first;
+    }
+    Node<T> *current = first;
     Node<T> *prev = nullptr;
-    int i = 0, j = 0;
-
-    while (i < first_size && j < second_size) {
-        if (first->val < second->val) {
-            prev = first;
-            if (++i < first_size) first = first->next;
+    Node<T> *max = first;
+    while (current != nullptr) {
+        if (current->next != nullptr && current->next->val > max->val) {
+            prev = current;
+            max = current->next;
         }
-        else {
-            if(prev != nullptr) prev->next = second;
-            prev = second;
-            if (++j < second_size) {
-                second = second->next;
-            }
-            else {
-                second = nullptr;
-            }
-            prev->next = first;
-        }
+        current = current->next;
     }
-    first->next = second;
-    for (; i < first_size && first->next != nullptr; ++i) {
-        if (++j < first_size) {
-            first = first->next;
-        }
-        else {
-            first = nullptr;
-        }
+    if (prev != nullptr) {
+        prev->next = max->next;
+        max->next = first;
     }
-    for (; j < second_size && second->next != nullptr; ++j) {
-       if (++j < second_size) {
-            second = second->next;
-        }
-        else {
-            second = nullptr;
-        }
-    }
-    return new_head;
+    max->next = selection_sort(max->next);
+    return max;
 }
-*/
+
+template <typename T>
+bool Linked_List<T>::is_prime(T n) {
+    if(n > 1) {
+        for (int i = 2; i <= n/2; ++i) {
+            if (n % i == 0) return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+template <typename T>
+unsigned int Linked_List<T>::count_primes() {
+    Node<T> *current = head;
+    unsigned int count = 0;
+    while (current != nullptr) {
+        if (is_prime(current->val)) {
+            ++count;
+        }
+        current = current->next;
+    }
+    return count;
+}
 
 #endif
