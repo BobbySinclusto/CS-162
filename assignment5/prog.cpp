@@ -35,13 +35,13 @@ void test_unsigned();
 ********************************************************/
 int main() {
     do {
-        if (get_input_dichotomy("Would you like to create a list of signed or unsigned integers? (s/u): ", 's', 'u')) {
+        if (get_input_dichotomy("Would you like to create a list of signed or unsigned integers? (s or u): ", 's', 'u')) {
             test_signed();
         }
         else {
             test_unsigned();
         }
-    } while (get_input_dichotomy("Would you like to do this again? (y/n): ", 'y', 'n'));
+    } while (get_input_dichotomy("Would you like to do this again? (y or n): ", 'y', 'n'));
     
     return 0;
 }
@@ -50,8 +50,8 @@ void test_unsigned() {
     Linked_List<unsigned int> l;
     do {
         l.push_back(get_unsigned_int("Enter a positive number: "));
-    } while (get_input_dichotomy("Would you like to add another number? (y/n): ", 'y', 'n'));
-    if (get_input_dichotomy("Sort ascending or descending? (a/d): ", 'a', 'd')) {
+    } while (get_input_dichotomy("Would you like to add another number? (y or n): ", 'y', 'n'));
+    if (get_input_dichotomy("Sort ascending or descending? (a or d): ", 'a', 'd')) {
         l.sort_ascending();
     }
     else {
@@ -67,8 +67,8 @@ void test_signed() {
     Linked_List<int> l;
     do {
         l.push_back(get_int("Enter a number: "));
-    } while (get_input_dichotomy("Would you like to add another number? (y/n): ", 'y', 'n'));
-    if (get_input_dichotomy("Sort ascending or descending? (a/d): ", 'a', 'd')) {
+    } while (get_input_dichotomy("Would you like to add another number? (y or n): ", 'y', 'n'));
+    if (get_input_dichotomy("Sort ascending or descending? (a or d): ", 'a', 'd')) {
         l.sort_ascending();
     }
     else {
