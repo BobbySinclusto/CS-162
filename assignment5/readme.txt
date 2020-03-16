@@ -9,10 +9,11 @@ Program Description: This program shows off the functionality of my linked list 
 
 Extra Credit:
     The Linked_List and Node classes are template classes, and the user can choose to have a list
-    of signed or unsigned numbers.
+    of signed or unsigned numbers when they run the program. Note: the is_prime function is slow
+    when checking large prime numbers and can take up to about 15 seconds per element.
 
     The sort_descending() function is implemented using a recursive selection sort algorithm in the
-    function selection_sort().
+    function selection_sort(). (See Linked_List.hpp, line 344)
 
 Compile:
     make
